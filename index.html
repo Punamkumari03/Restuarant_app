@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restuarant App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+    <div class="d-flex justify-content-center" style="height: 100vh;">
+        <form>
+            <div class="form-group">
+              <label for="exampleFormControlSelect1">Choose price</label>
+              <select class="form-select" aria-label="Default select example" id="amount">
+                <option selected></option>
+                <option value="100">100</option>
+                <option value="200">200</option>
+                <option value="500">500</option>
+              </select>
+            </div>
+            <div class="form-group">
+                <label for="exampleFormControlSelect1">Choose Dish</label>
+                <select class="form-select" aria-label="Default select example" id="description">
+                    <option selected></option>
+                    <option value="Fried Rice">Fried Rice</option>
+                    <option value="Chicken Briyani">Chicken Briyani</option>
+                    <option value="Momos">Momos</option>
+                  </select>
+              </div>
+              <div class="form-group">
+                <label for="exampleFormControlSelect1">Coose Table</label>
+                <select class="form-select" aria-label="Default select example" id="category">
+                    <option selected></option>
+                    <option value="Tablw 1">Table 1</option>
+                    <option value="Table 2">Table 2</option>
+                    <option value="Table 3">Table 3</option>
+                  </select>
+              </div>
+              <br>
+              <button type="submit" class="btn btn-secondary" onclick="addData(event)">Add To Bill</button>
+          </form>
+          <ul id="item">
+            <!-- <li class="l_items"><button class="li_btn"></button>
+            </li> -->
+            
+          </ul>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.4/axios.min.js"></script>
+    <script src="./index.js"></script>
+  
+</body>
+</html>
