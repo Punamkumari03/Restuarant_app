@@ -1,83 +1,103 @@
-var ul=document.getElementById('item')
-ul.addEventListener('click',removeItem)
+const ul = document.getElementById("item");
 
-function addData(event){
-    event.preventDefault()
-    var amount=document.getElementById('amount').value 
-    var description=document.getElementById('description').value 
-    var category=document.getElementById('category').value 
+let table1 = document.getElementById("table1-list");
+let table2 = document.getElementById("table2-list");
+let table3 = document.getElementById("table3-list");
 
-    var li=document.createElement('li');
-    var deleteBtn = document.createElement('button');
-    var editBtn = document.createElement('button');
-   
-    deleteBtn.className = 'li_btn';
-   
-    deleteBtn.appendChild(document.createTextNode('Delete'))
- 
-    li.appendChild(document.createTextNode(amount+' '+description+' '+category))
-    li.appendChild(editBtn);
-    li.appendChild(deleteBtn);
-    ul.appendChild(li);
-    
-    let myObj ={
-        amount:amount,
-        description:description ,
-        category:category  
-    }
-axios.post("https://crudcrud.com/api/514a509335d94e47b4725ba17d5817a4/restaurant",myObj)
-.then((response)=>{
-    console.log(response)
-})
-.catch((err)=>{
-    console.log(err)
-})
-axios.get("https://crudcrud.com/api/514a509335d94e47b4725ba17d5817a4/restaurant")
-.then((response)=>{
-    console.log(response)
-    for(var i=0; i<response.data.length;i++){
-        showUserDetail(response.data[i])
-    }
-})
-.catch((err)=>{
-    console.log(err)
-})
-function showUserDetail(user){
+// !Event listeners
+ul.addEventListener("click", removeItem);
+window.addEventListener("DOMContentLoaded", fetchDetails);
 
-    var li=document.createElement('li');
-    var deleteBtn = document.createElement('button');
-   
-   
-    deleteBtn.className = 'li_btn';
-   
-    deleteBtn.appendChild(document.createTextNode('Delete'))
- 
-    li.appendChild(document.createTextNode(user.amount+'--'+user.description+'--'+user.category+'--'+user._id+'--'))
-   
-    li.appendChild(deleteBtn);
-    ul.appendChild(li);
-}
-showUserDetail()
-}
-function removeItem(event){
-    if(event.target.classList.contains('li_btn')){
-        var li = event.target.parentElement;
-        var data=li.textContent
-        data=data.split('--')
-        var id =data[3]
-        axios.delete(`https://crudcrud.com/api/514a509335d94e47b4725ba17d5817a4/restaurant/${id}`)
-        .then((response)=>{
-            console.log(response)
-            for(var i=0;i<response.data.length;i++){
-                showUserDetail(response.data[i])
-            }
-        })
-        .catch((err)=>{
-            console.log(err)
-        })
-        ul.removeChild(li)
-
-    }
-
+// ! fetch details function
+async function fetchDetails() {
+  try {
+    const response = await axios.get(
+      "https://crudcrud.com/api/dcb5a5b162434d1a869a6739f20feb05/restaurant"
+    );
+    console.log("get successful on load");
+    response.data.forEach((user) => {
+      showUserDetail(user);
+    });
+  } catch (error) {
+    console.log(error);
+  }
 }
 
+//! add data function
+async function addData(event, obj) {
+  event.preventDefault();
+
+  const amount = document.getElementById("amount").value;
+  const description = document.getElementById("description").value;
+  const category = document.getElementById("category").value;
+
+  const deleteBtn = document.createElement("button");
+  deleteBtn.className = "delete";
+  deleteBtn.textContent = "Delete";
+
+  const li = document.createElement("li");
+  li.textContent = amount + " -- " + description + " -- " + category + " -- ";
+  li.appendChild(deleteBtn);
+
+  if (category === "Table 1") {
+    table1.appendChild(li);
+  } else if (category === "Table 2") {
+    table2.appendChild(li);
+  } else {
+    table3.appendChild(li);
+  }
+
+  let myObj = {
+    amount: amount,
+    description: description,
+    category: category,
+  };
+
+  try {
+    const response = await axios.post(
+      "https://crudcrud.com/api/dcb5a5b162434d1a869a6739f20feb05/restaurant",
+      myObj
+    );
+    li.id = response.data._id;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function showUserDetail(user) {
+  const deleteBtn = document.createElement("button");
+  deleteBtn.className = "delete";
+  deleteBtn.textContent = "Delete";
+
+  const li = document.createElement("li");
+  li.textContent =
+    user.amount + " -- " + user.description + " -- " + user.category + " -- ";
+  li.appendChild(deleteBtn);
+  li.id = user._id;
+
+  if (user.category === "Table 1") {
+    table1.appendChild(li);
+  } else if (user.category === "Table 2") {
+    table2.appendChild(li);
+  } else {
+    table3.appendChild(li);
+  }
+}
+
+async function removeItem(event) {
+  if (event.target.classList.contains("delete")) {
+    const li = event.target.parentElement;
+    const liParent = li.parentElement;
+    liParent.removeChild(li);
+
+    const id = li.id;
+    try {
+      const response = await axios.delete(
+        `https://crudcrud.com/api/dcb5a5b162434d1a869a6739f20feb05/restaurant/${id}`
+      );
+      console.log("delete successful", response);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+}
